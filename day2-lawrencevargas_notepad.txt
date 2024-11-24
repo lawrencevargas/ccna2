@@ -1,0 +1,164 @@
+TemPlate_CoreSW:
+config t
+vlan 25
+ name concentrix.com
+ exit
+Int vlan 25
+ no shut
+ ip add 10.0.8.1 255.255.248.0
+ip dhcp excluded-add 10.0.8.1 10.0.8.100
+ip dhcp pool concentrix.com
+ network 10.0.8.0 255.255.248.0
+ default-router 10.0.8.1
+ domain-name concentrix.com
+ dns-server 10.21.1.10
+ option 150 ip 10.21.100.8
+ Int Fa 0/7
+  swi voice vlan 25
+  do sh ip dhcp binding
+  
+  
+!Example 5
+!TemPlate_CoreSW:
+config t
+vlan 25
+ name pnp.gov.ph
+ exit
+Int vlan 25
+ no shut
+ ip add 10.0.2.1 255.255.254.0
+ip dhcp excluded-add 10.0.2.1 10.0.2.100
+ip dhcp pool pnp.gov.ph
+ network 10.0.2.0 255.255.254.0
+ default-router 10.0.2.1
+ domain-name pnp.gov.ph
+ dns-server 10.21.1.10
+ option 150 ip 10.21.100.8
+ Int Fa 0/7
+  swi voice vlan 25
+  do sh ip dhcp binding
+  
+  
+!corebaba (convert access to voice)
+ int fa0/7
+ no switchport access vlan 25
+ shut
+ noshut
+ 
+!Example 6
+ config t
+vlan 25
+ name deped.gov.ph
+ exit
+Int vlan 25
+ no shut
+ ip add 10.0.1.1 255.255.255.0
+ip dhcp excluded-add 10.0.1.1 10.0.1.100
+ip dhcp pool deped.gov.ph
+ network 10.0.1.0 255.255.255.0
+ default-router 10.0.1.1
+ domain-name deped.gov.ph
+ dns-server 10.21.1.10
+ option 150 ip 10.21.100.8
+ Int Fa 0/7
+  swi voice vlan 25
+  do sh ip dhcp binding
+  
+ !Example7
+int vlan 25
+no shut
+ip add 10.0.0.65 255.255.255.192
+no ip dhcp excluded-add 10.0.0.65 10.0.0.100
+ip dhcp excluded-add 10.0.0.65 10.0.0.70
+ip dhcp pool andoksmanok.com
+ network 10.0.0.64 255.255.255.192
+ default-router 10.0.0.65
+ domain-name andoksmanok.com
+ dns-server 10.21.1.10
+ option 150 ip 10.21.100.8
+ Int Fa 0/7
+  swi voice vlan 25
+  do sh ip dhcp binding
+  
+  
+   !Example7
+int vlan 25
+no shut
+ip add 10.0.0.65 255.255.255.192
+no ip dhcp excluded-add 10.0.0.1 10.0.0.100
+ip dhcp excluded-add 10.0.0.65 10.0.0.70
+ip dhcp pool andoksmanok.com
+ network 10.0.0.64 255.255.255.192
+ default-router 10.0.0.65
+ domain-name andoksmanok.com
+ dns-server 10.21.1.10
+ option 150 ip 10.21.100.8
+ Int Fa 0/7
+  swi voice vlan 25
+  do sh ip dhcp binding
+  
+  !Task 7: Implementation
+
+
+!D1:coreSW: dhcpserver/vlan creator  
+config t
+vlan 12
+ name andoks.com
+ exit
+Int vlan 12
+ no shut
+ ip add 172.16.2.1 255.255.254.0
+ip dhcp excluded-add 172.16.2.1 172.16.2.50
+ip dhcp pool andoks.com
+ network 172.16.2.0 255.255.254.0
+ default-router 172.16.2.1
+ domain-name andoks.com
+ dns-server 10.21.1.10
+ option 150 ip 10.21.100.8
+ 
+!A1:dhcpTagaPasa/vlanUser
+conf t
+ Int e0/0
+  switchport access vlan 12
+  do sh ip dhcp binding
+  
+!P1:pahingi ng IP:
+conf t
+int e0/0
+ip add dhcp
+no shut
+do bp
+  
+!Baliwag (for homework sample)
+!D1:coreSW: dhcpserver/vlan creator  
+config t
+vlan 5
+ name baliwag.com
+ exit
+Int vlan 5
+ no shut
+ ip add 172.16.16.1 255.255.240.0
+ip dhcp excluded-add 172.16.16.1 172.16.16.50
+ip dhcp pool baliwag.com
+ network 172.16.16.0 255.255.240.0
+ default-router 172.16.16.1
+ domain-name baliwag.com
+ dns-server 10.21.1.10
+ option 150 ip 10.21.100.8
+ 
+!A2:dhcpTagaPasa/vlanUser
+conf t
+ Int e1/0
+  switchport access vlan 5
+  do sh ip dhcp binding
+  
+!P2:pahingi ng IP:
+conf t
+int e1/0
+ip add dhcp
+no shut
+do bp
+
+STATIC ROUTING
+
+  
