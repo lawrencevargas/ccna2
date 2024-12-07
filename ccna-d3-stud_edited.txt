@@ -1,0 +1,446 @@
+Ansible
+Terraform
+
+Configuration Language: HCL (HashiCorp Configuration Language), JSON
+Architecture: Client-Server (optional), but typically agentless (direct API calls)
+Deployment Method: Declarative (Desired State), Pull Model (or Push with orchestration)
+Files Created before operation: .tf files (main, variables, outputs, providers)
+Availability: Terraform Primary Instance
+How to manage devices: Works with APIs of cloud providers, infrastructure as a code tools
+Installation: Moderate (requires installation of Terraform binary and plugin providers)
+Transport Mechanism: API calls over HTTP/HTTPS
+Port Used: Typically HTTPS (TCP port 443)
+Initial Release: 2014
+
+https://github.com/rivan16/sshansible
+
+
+
+RSTHAYUP ROUTING COMPLETE:
+
+(konting review from Day 2)
+ACCENTURE is one of the largest BPO companies....... they invested XXX million dollars 100 core switches, 88 routers, 64 leased line .........  as a network engineer, design and configure the domain accenture.com call center with 1500 personnel.
+
+Which of the following Network/CIDR is preferable to implement?
+
+a. 10.0.0.0/8
+b. 10.0.8.0/21
+c. 10.0.10.0/18
+d. 10.100.10.0/10
+
+answer: B .... why B????
+
+C: Convert it: 1500 = 11 bits = /11
+S: Subtract It = /32 - /11 = /21 (255.255.248.0) "3rd, 8i"
+I: Ipasok sa 3rd si 8i
+
+ACCERNTURE.COM network
+Network IP: 10.0.8.0
+First: 10.0.8.1
+Last: 10.0.15.254
+Broadcast: 10.0.15.255
+
+not ACCENTURE: 10.0.16.0
+
+
+The 5-hit Combo in IP Addressing:
+Design 192.168.100.0 subnet to 5 offices:
+(Combo 1-3)
+C: convert: 5 = 3 bits
+A: Add  /24 + /3 = /27
+I: Ipasok si 32i sa 4th
+
+1st Office: 192.168.100.32
+2nd Office: 192.168.100.64
+3rd Office: 192.168.100.96
+4th Office: 192.168.100.128
+5th Office: 192.168.100.160
+
+(Extra Combo 4-5)
+Find the total hosts: /32 -  _____  = /27 =  2^5= 32 - 2 = 30 hosts per subnet 
+
+Find all the subnets: /24 + _____ = /27 = 2^3 = 8 subnets
+	    
+Really??? 8 Subnets????:
+Subnet-Zero 192.168.100.0
+1st Subnet: 192.168.100.32
+2nd Subnet: 192.168.100.64
+3rd Subnet: 192.168.100.96
+4th Subnet: 192.168.100.128
+5th Subnet: 192.168.100.160
+6th Subnet 192.168.100.192
+7th Subnet 192.168.100.224
+
+
+RST HAYUP COMPLETE ROUTING:
+
+@S1 - ok
+	conf t
+	int e1/0
+	ip add 192.168.1.133 255.255.255.224 
+	no shut
+	
+	!floating default static with redundancy
+	ip route 0.0.0.0 0.0.0.0 192.168.1.129 1
+	ip route 0.0.0.0 0.0.0.0 192.168.1.130 2
+
+
+@S2 - ok
+	conf t
+	int e1/0
+	ip add 10.2.2.133 255.255.255.0 
+	no shut
+	
+	!floating default static with redundancy
+	ip route 0.0.0.0 0.0.0.0 10.2.2.2 1
+	ip route 0.0.0.0 0.0.0.0 10.2.2.1 2
+	do sh ip route static
+
+
+
+@D1 - ok
+
+conf t
+ip dhcp excluded-add 10.2.1.1 10.2.1.99
+ip dhcp excluded-add 10.2.1.200 10.2.1.254
+ip dhcp pool vlan10
+	network 10.2.1.0 255.255.255.0
+	default-router 10.2.1.254
+
+!set vlan 10 to e1/0 of D1 - done
+conf t
+int e1/0
+	switchport mode access
+	switchport access vlan 10
+
+
+
+
+@D2 (10.2.2.0 - VLAN20) - done
+conf t
+ip dhcp excluded-add 10.2.2.1 10.2.2.99
+ip dhcp excluded-add 10.2.2.200 10.2.2.254
+ip dhcp pool vlan20
+	network 10.2.2.0 255.255.255.0
+	default-router 10.2.2.254
+
+!set vlan 20 to e1/0 of D2 (VLAN 20) - done
+conf t
+int e1/0
+	switchport mode access
+	switchport access vlan 20
+
+
+
+
+
+@A1        (assign to VLAN 10 with IP of 10.2.1.0) - done
+conf t
+int e0/0
+switchport mode access
+switchport access vlan 10
+end 
+
+
+@P1 (assign IP address from DHCP) - done
+conf t
+int e0/0
+ip add dhcp
+no shut
+do sh ip int br | ex una   !display assigned IP addres from dhcp
+!it usually don't assign IP real quick because of its states progressing.
+!DORA: Discover, Offer, Request, Acknowledge
+
+
+
+
+
+@A2  (assign to VLAN 20 with IP of 10.2.2.0) - done
+conf t
+int e1/0
+switchport mode access
+switchport access vlan 20
+end 
+
+@P2 (assign IP address from DHCP) - done
+conf t
+int e1/0
+ip add dhcp
+no shut
+do sh ip int br | ex una     !show ip interface brief | exclude unassign
+
+
+
+
+
+
+
+
+how to set EIGRP routing
+(Enhanced Interior Gateway Routing Protocol)
+(Cisco Proprietary)
+
+@D1 - done
+conf t
+router eigrp 100
+	no auto-summary
+	network 10.2.1.0 0.0.0.255
+	network 10.2.2.0 0.0.0.255
+	network 10.1.4.4 0.0.0.3
+end
+
+
+@D2 - done
+conf t
+router eigrp 100 
+	no auto-summary
+	network 10.2.1.0 0.0.0.255
+	network 10.2.2.0 0.0.0.255
+	network 10.1.4.8 0.0.0.3
+end
+
+
+@R4 - done
+conf t
+router eigrp 100
+	no auto-summary
+	network 10.1.4.4 0.0.0.3
+	network 10.1.4.8 0.0.0.3
+end
+
+sh ip eigrp nei
+(show the running status of eigrp, timer=ok)
+
+sh ip protocols
+sh ip route | inc D
+
+
+
+OSPF (Open Shortest Path First)
+
+@R4 - done
+conf t
+int loopback 0
+	ip add 4.4.4.4 255.255.255.255
+router ospf 1
+	router-id 4.4.4.4
+	network 10.1.1.8 0.0.0.3 area 34
+	network 4.4.4.4 0.0.0.0 area 34
+end
+
+@R3 - done
+conf t
+int loopback 0
+	ip add 3.3.3.3 255.255.255.255
+router ospf 1
+	router-id 3.3.3.3
+	network 10.1.1.8 0.0.0.3 area 34
+	network 3.3.3.3 0.0.0.0 area 0
+	network 10.1.1.4 0.0.0.3 area 0
+	exit
+
+@R2 - done
+conf t
+int loopback 0
+	ip add 2.2.2.2 255.255.255.255 
+router ospf 1
+	router-id 2.2.2.2
+	network 10.1.1.0 0.0.0.3 area 12
+	network 2.2.2.2 0.0.0.0 area 0
+	network 10.1.1.4 0.0.0.3 area 0
+	exit
+
+
+@R1 - done
+conf t
+int loopback 0
+	ip add 1.1.1.1 255.255.255.255
+router ospf 1
+	router-id 1.1.1.1
+	network 10.1.1.0 0.0.0.3 area 12
+	network 1.1.1.1 0.0.0.0 area 12
+	network 10.1.1.4 0.0.0.3 area 0
+	exit
+
+sh ip ospf nei !(FULL state = OK)
+!OSPF States: Down, Init, Two-Way, Exstart, Exchange, Loading, FULL
+
+
+
+BGP - Border Gateway Protocol
+	(BiG Payroll)
+@R1 - done
+conf t
+router bgp 1
+ bgp log-neighbor-changes
+ neighbor 208.8.8.4 remote-as 45
+ neighbor 207.7.7.2 remote-as 2
+ neighbor 209.9.9.3 remote-as 3
+ network 208.8.8.0 mask 255.255.255.0
+ network 207.7.7.0 mask 255.255.255.0
+ network 209.9.9.0 mask 255.255.255.0
+ network 10.1.1.0 mask 255.255.255.252
+end
+
+
+@I1 - done
+conf t
+router bgp 45
+ bgp log-neighbor-changes
+ neighbor 45.4.5.5 remote-as 45
+ neighbor 24.2.4.2 remote-as 2
+ neighbor 208.8.8.1 remote-as 1
+ network 208.8.8.0 mask 255.255.255.0
+ network 45.4.5.0 mask 255.255.255.0
+ network 24.2.4.0 mask 255.255.255.0
+ network 44.44.44.44 mask 255.255.255.255
+!PretendInternet
+network 0.0.0.0
+ip route 0.0.0.0 0.0.0.0 null 0
+ip route 10.0.0.0 255.0.0.0 208.8.8.1
+end
+
+
+
+@I2 - done
+conf t
+router bgp 2
+ bgp log-neighbor-changes
+neighbor 24.2.4.4 remote-as 45
+	neighbor 207.7.7.1 remote-as 1
+	neighbor 25.2.5.5 remote-as 45
+	neighbor 32.3.2.3 remote-as 3
+	network 24.2.4.0 mask 255.255.255.0
+	network 207.7.7.0 mask 255.255.255.0
+	network 25.2.5.0 mask 255.255.255.0
+	network 32.3.2.0 mask 255.255.255.0
+	network 22.22.22.22 mask 255.255.255.255
+!PretendInternet
+network 0.0.0.0
+ip route 0.0.0.0 0.0.0.0 null 0
+ip route 10.0.0.0 255.0.0.0 207.7.7.1
+end
+sh ip bgp summary
+
+
+@I3 - done
+conf t
+router bgp 3
+ bgp log-neighbor-changes
+ neighbor 35.3.5.5 remote-as 45
+ neighbor 32.3.2.2 remote-as 2
+ neighbor 209.9.9.1 remote-as 1
+ network 35.3.5.0 mask 255.255.255.0
+ network 209.9.9.0 mask 255.255.255.0
+ network 32.3.2.0 mask 255.255.255.0
+ network 33.33.33.33 mask 255.255.255.255
+!PretendInternet
+network 0.0.0.0
+ip route 0.0.0.0 0.0.0.0 null 0
+ip route 10.0.0.0 255.0.0.0 209.9.9.1
+end
+
+
+
+@I4 - done
+conf t
+int lo8
+  ip add 8.8.8.8 255.255.255.255
+ exit
+router bgp 45
+ bgp log-neighbor-changes
+ neighbor 35.3.5.3 remote-as 3
+ neighbor 25.2.5.2 remote-as 2
+ neighbor 45.4.5.4 remote-as 45
+ network 35.3.5.0 mask 255.255.255.0
+ network 25.2.5.0 mask 255.255.255.0
+ network 45.4.5.0 mask 255.255.255.0
+ network 55.55.55.55 mask 255.255.255.255
+ network 8.8.8.8 mask 255.255.255.255
+end
+
+sh ip bgp summary !(should have timer, not never)
+!BGP States: Notification, Open, Keep Alive, Update
+
+
+
+ROUTE REDISTRIBUTION
+(by default, different routing protocols cannot get along each other)
+
+@r1      !magsama/live-in BGP & OSPF <3 - done
+conf t
+router ospf 1
+default-information originate always
+end
+
+
+@R4 - done
+!ipasok eigrp kay ospf
+conf t
+router ospf 1
+redistribute eigrp 100 subnets
+exit
+
+!ipasok ospf kay matapobreng eigrp - done
+router eigrp 100
+ redistribute ospf 1 metric 1544 2000 255 1 1500
+ end
+
+
+!End-Device needs Default Static
+@P1 - done
+conf t
+ip route 0.0.0.0 0.0.0.0 10.2.1.1
+end
+!not always 10.2.1.1 yung next hop
+!ping si kadikit na VLAN to confirm its next hop
+
+  
+@P2 - done
+conf t
+ip route 0.0.0.0 0.0.0.0 10.2.2.1 
+!P2 dadaan kay D2, therefore hindi si IP ni D1 yung next hop
+end
+
+
+
+ping 8.8.8.8 
+!should reply
+z
+traceroute 8.8.8.8
+!should display a lot of hops.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
