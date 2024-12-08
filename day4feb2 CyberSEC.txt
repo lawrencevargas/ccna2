@@ -230,6 +230,85 @@ Top 5 UTM: 1.FortinetFortigate: syet
            2. Checkpoint
            3.4 Cisco
 
+Firewall Profile No.1: use ExtendedACL vs NamedExtendedACL:
+ex.1: you are the admin for POGO sites:
+www.web310.com open only http, https, ping
+www.web311.com open only dns, https, ssh		==> 6 lines:
+	GOLDEN FIREWALL FORMULA: paloalto, fortinet, cisco, checkpoint.
+	
+	protocol			hacker 		victim 			port
+tcp, udp, icmp, ip		Any			web310/11		80, 443, 53, 22
+
+conf t
+service timestamps log datetime
+service timestamps debug datetime
+logging trap 5
+no ip access-list Extended FWP1
+ip access-list Extended FWP1
+	permit tcp any host www.web310.com eq 80 log !http
+	permit tcp any host www.web310.com eq 443 log !https
+	permit icmp any host www.web310.com log
+	permit tcp any host www.web311.com eq 53 log !dns
+	permit tcp any host www.web311.com eq 443 log !https
+	permit tcp any host www.web311.com eq 22 log !ssh
+Int Gi 3
+	ip access-group FWP1 in 
+	
+!REMOVE FIREWALL
+Int Gi 3
+	NO ip access-group FWP1 in 
+
+ex.2: you are the admin for POGO sites:
+www.web310.com open only ssh,dns,http
+www.web311.com open telnet, ssh, https, ping/icmp => 7 lines
+	GOLDEN FIREWALL FORMULA: paloalto, fortinet, cisco, checkpoint.
+	
+	protocol			hacker 		victim 			port
+	
+conf t
+no ip access-list Extended FWP2
+ip access-list Extended FWP2
+	permit tcp any host www.web310.com eq 22 log
+	permit tcp any host www.web310.com eq 53 log 
+	permit tcp any host www.web310.com eq 80 log
+	permit tcp any host www.web311.com eq 23 log 
+	permit tcp any host www.web311.com eq 22 log 
+	permit tcp any host www.web311.com eq 443 log 
+	permit icmp any host www.web311.com log
+Int Gi 3
+	ip access-group FWP2 in 
+
+ex.3: you are the admin for PRANING POGO sites:
+www.web310.com open only 443
+www.web311.com open only ping
+
+conf t
+no ip access-list Extended PRANING3
+ip access-list Extended PRANING3
+	permit tcp any host www.web310.com eq 443 log
+	permit icmp any host www.web311.com log
+Int Gi 3
+	ip access-group PRANING3 in 
+
+ex.4: you are the admin for SUPERPRANING4 POGO sites:
+www.web310.com open only ping, dns
+www.web311.com open only ping ssh = 4 lines
+
+conf t
+no ip access-list Extended SUPERPRANING4
+ip access-list Extended SUPERPRANING4
+	permit icmp any host www.web310.com log
+	permit tcp any host www.web310.com eq 53 log
+	permit icmp any host www.web311.com log
+	permit tcp any host www.web311.com eq 22 log
+Int Gi 3
+	ip access-group SUPERPRANING4 in 
+	
+remove SUPERPRANING4
+Int Gi 3
+	no ip access-group SUPERPRANING4 in 
+
+
 CYBERSECURITY TASK7: PROTECTING YOUR CORPORATE WEB APPS.
 EX.1 CREATE A FIREWALL POLICY NAMED Policy1 TO OPEN
 WWW.WEB8.COM HAS HTTP AND HTTPS AS OPEN
@@ -362,18 +441,18 @@ STEP2: create Access-list to permit IP of Inside:
 STEP3: create a NAT pool with overload
 @vpnPH:
 config t
-int gi 2
-ip nat OUTSIDE
 int gi 1
+ip nat OUTSIDE
+int gi 2
 ip nat INSIDE
 int gi 3
 ip nat INSIDE
-no access-list 7
-access-list 7 permit 192.168.101.0 0.0.0.255
-access-list 7 permit 192.168.103.0 0.0.0.255
-ip nat inside source list 7 interface Gi 2 overload
-ip nat inside source static 192.168.103.11 192.168.108.69
-ip nat inside source static 192.168.103.12 192.168.108.88
+no access-list 9
+access-list 9 permit 192.168.102.0 0.0.0.255
+access-list 9 permit 192.168.103.0 0.0.0.255
+ip nat inside source list 9 interface Gi 1 overload
+ip nat inside source static 192.168.102.100 208.8.8.69
+ip nat inside source static 192.168.103.100 208.8.8.88
 end
 FW-VPN-PH#show ip nat translations 
 Pro  Inside global         Inside local          Outside local         Outside global
