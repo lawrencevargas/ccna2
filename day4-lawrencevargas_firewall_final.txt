@@ -1,0 +1,276 @@
+R1-fwVPN-PH#sh run               
+Building configuration...
+
+Current configuration : 6582 bytes
+!
+! Last configuration change at 14:51:29 UTC Sun Dec 8 2024 by admin
+!
+version 16.9
+service timestamps debug datetime
+service timestamps log datetime
+service udp-small-servers
+service tcp-small-servers
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+platform console virtual
+!
+hostname R1-fwVPN-PH
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+ip host c6 10.21.50.6
+ip host c8 10.21.50.8
+ip host cm 10.21.100.8
+ip host cm2 10.21.100.9
+ip host www.web310.com 192.168.103.10
+ip host www.web311.com 192.168.103.11
+ip host ed 10.21.12.1
+ip host p1 10.21.100.101
+ip host p2 10.21.100.102
+ip host pc 10.21.1.10
+ip host sw 10.21.1.4
+ip name-server 8.8.8.8 1.1.1.1
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+! 
+!         
+! 
+! 
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-3668751554
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3668751554
+ revocation-check none
+ rsakeypair TP-self-signed-3668751554
+!
+!
+crypto pki certificate chain TP-self-signed-3668751554
+ certificate self-signed 01
+  30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 33363638 37353135 3534301E 170D3234 31323036 31363532 
+  32345A17 0D333030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 36363837 
+  35313535 34308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201 
+  0A028201 0100A96C CA3DA935 FAED94BA B1285C98 F19A93F0 7FCC13E2 F41BC2E4 
+  858F66B7 18CDEA95 F36FDCB1 3A0D5820 73F7A9E7 ABCABFAF 4058FAB6 E00C1ACE 
+  9D881A32 E297F661 7B1570A0 051AD382 5AA5BBA9 898A1FFC FBABCDDA 87BABA6B 
+  55DC1046 481FFD35 0FB2A50B 06A5C189 A30909F9 336444BC AEED72F3 32828AE1 
+  AC3AEC74 51354064 2CCF8187 A98598CA 69EE3760 FEEBD2C0 6C0D8321 790E9429 
+  B1383D4B BEEC4DD5 7867AEEF 9E6C2C67 D1E5CC2B 4C4EA910 BDACCE48 3467DAB4 
+  7494EB90 B0BFDDBB 1F479082 2E8A1BAE 74E4028A 70174C3E 66FFA13F A5E7B005 
+  6354F2C5 5EF888E5 A963737E 5F629BD3 0A506F07 11D5771F D120F503 2B9108F4 
+  601AEEFB F9E10203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 
+  301F0603 551D2304 18301680 14E69524 D7C4166B 314045DD 91B92607 F76A9BAD 
+  EC301D06 03551D0E 04160414 E69524D7 C4166B31 4045DD91 B92607F7 6A9BADEC 
+  300D0609 2A864886 F70D0101 05050003 82010100 4827FFC5 9F484062 9A4B63A2 
+  C4178E29 079A44B9 2253044B 1FB0A202 5118BBBE 2E3A9228 68E60CAA D97551E4 
+  CBF530AA AA4D90D5 EBFB6570 3E584879 272551C5 5E3796E0 59E32005 3881E513 
+  BA78771A 2E74B0C0 53A62C63 D281036B 5FDFB388 E8278E9C C2120792 3B9D577E 
+  520088CB 7397CEFA 8F6AD3C0 B386E1B0 EB3DDD30 243E18F1 707E1294 73EBCAF7 
+  C0C87495 928AB585 9857F5B8 B962C5F5 4242B94C 14DF792B 4BB55AB1 1979B53D 
+  D21A4B9F D16442E4 624DA173 A2B15CD1 1813CC8B DF0C6F31 DAACC24A 65A1808A 
+  812D151F DDF93FB5 A90DA40F 00290BCE EBA6B086 C13AEF75 9D505071 487062FE 
+  70C2DBE3 EA37342E D2305FCE 7D7D7262 9571EBE0
+        quit
+!
+crypto pki certificate pool
+ cabundle nvram:ios_core.p7b
+!
+!
+!
+!
+!
+!
+!         
+!
+license udi pid CSR1000V sn 9ZRA3K0D59W
+license boot level ax
+no license smart enable
+diagnostic bootup level minimal
+!
+spanning-tree extend system-id
+!
+!
+!
+username admin privilege 15 secret 5 $1$HE/k$KoalG4mSbEykpKj3icx6H1
+!
+redundancy
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+!
+interface GigabitEthernet1
+ ip address 208.8.8.11 255.255.255.0
+ ip nat outside
+ ip access-group NOTORRENT in
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet2
+ ip address 192.168.102.11 255.255.255.0
+ ip nat inside
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet3
+ ip address 192.168.103.10 255.255.255.0 secondary
+ ip address 192.168.103.11 255.255.255.0
+ ip nat inside
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+ip forward-protocol nd
+ip finger 
+ip http server
+ip http authentication local
+ip http secure-server
+ip nat inside source static 192.168.102.100 208.8.8.69
+ip nat inside source static 192.168.103.100 208.8.8.88
+ip nat inside source list 9 interface GigabitEthernet1 overload
+ip dns server
+ip route 0.0.0.0 0.0.0.0 208.8.8.2
+!
+!
+!
+ip access-list standard GAMBLING
+ deny   202.69.184.0 0.0.0.255
+ deny   75.2.114.0 0.0.0.255
+ deny   99.83.183.0 0.0.0.255
+ deny   192.124.249.0 0.0.0.255
+ deny   65.19.58.0 0.0.0.255
+ deny   104.116.243.0 0.0.0.255
+ permit any
+ip access-list standard NOGAMBLING
+ deny   202.69.184.0 0.0.0.255
+ deny   75.2.114.0 0.0.0.255
+ deny   99.83.183.0 0.0.0.255
+ deny   192.124.249.0 0.0.0.255
+ deny   65.19.58.0 0.0.0.255
+ deny   104.116.243.0 0.0.0.255
+ permit any
+ip access-list standard NOPORN1
+ deny   66.254.0.0 0.0.255.255
+ deny   104.21.0.0 0.0.255.255
+ deny   68.235.0.0 0.0.255.255
+ deny   104.17.0.0 0.0.255.255
+ deny   88.208.0.0 0.0.255.255
+ deny   208.77.0.0 0.0.255.255
+ deny   172.67.0.0 0.0.255.255
+ permit any
+ip access-list standard NOTORRENT
+ deny   162.159.136.0 0.0.0.255
+ deny   104.31.16.0 0.0.0.255
+ deny   172.67.73.0 0.0.0.255
+ permit any
+ip access-list standard SCHOOL
+ deny   202.65.183.0 0.0.0.255
+ deny   104.22.36.0 0.0.0.255
+ deny   202.125.102.0 0.0.0.255
+ deny   202.92.131.0 0.0.0.255
+ permit any
+!
+ip access-list extended FWP1
+ permit tcp any host 192.168.103.10 eq www log
+ permit tcp any host 192.168.103.10 eq 443 log
+ permit icmp any host 192.168.103.10 log
+ permit tcp any host 192.168.103.11 eq domain log
+ permit tcp any host 192.168.103.11 eq 443 log
+ permit tcp any host 192.168.103.11 eq 22 log
+ip access-list extended FWP2
+ permit tcp any host 192.168.103.10 eq 22 log
+ permit tcp any host 192.168.103.10 eq domain log
+ permit tcp any host 192.168.103.10 eq www log
+ permit tcp any host 192.168.103.11 eq telnet log
+ permit tcp any host 192.168.103.11 eq 22 log
+ permit tcp any host 192.168.103.11 eq 443 log
+ permit icmp any host 192.168.103.11 log
+ip access-list extended PRANING3
+ permit tcp any host 192.168.103.10 eq 443 log
+ permit icmp any host 192.168.103.11 log
+ip access-list extended SUPERPRANING4
+ permit icmp any host 192.168.103.10 log
+ permit tcp any host 192.168.103.10 eq domain log
+ permit icmp any host 192.168.103.11 log
+ permit tcp any host 192.168.103.11 eq 22 log
+logging trap notifications
+access-list 9 permit 192.168.102.0 0.0.0.255
+access-list 9 permit 192.168.103.0 0.0.0.255
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+line con 0
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ login local
+ transport input all
+line vty 5 14
+ exec-timeout 0 0
+ login
+ transport input all
+!
+!
+!
+!
+!
+!
+end

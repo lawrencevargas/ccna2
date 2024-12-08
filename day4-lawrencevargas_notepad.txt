@@ -1,0 +1,236 @@
+Try to block the IP of 4 Schools
+
+ping <URL>
+
+and get its ip address
+
+@R1
+conf t
+NO ip access-list standard NOSCHOOL
+ip access-list standard NOSCHOOL
+DENY 202.65.183.0 0.0.0.255  !ust.edu.ph
+DENY 104.22.36.0 0.0.0.255  !dlsu.edu.ph
+DENY 202.125.102.0 0.0.0.255 !Ateneo.edu
+DENY 202.92.131.0 0.0.0.255 !upd.edu.ph
+Permit Any
+
+Int Gi 1
+	ip access-group NOSCHOOL in
+end
+
+!Allow schools
+Int Gi 1
+	NO ip access-group NOSCHOOL in
+end
+
+Ex. 3 You are addicted on EndingGambling
+BLOCK
+ping www.cavs.com 202.69.184.144
+ping www.lakers.com 75.2.114.81
+ping www.bulls.com 99.83.183.221
+ping www.mavs.com 192.124.249.3
+ping www.nets.com 65.19.58.135
+ping www.knicks.com 104.116.243.112
+
+conf t
+NO ip access-list standard NOGAMBLING
+ip access-list standard NOGAMBLING
+DENY 202.69.184.0 0.0.0.255  
+DENY 75.2.114.0 0.0.0.255  
+DENY 99.83.183.0 0.0.0.255 
+DENY 192.124.249.0 0.0.0.255 
+DENY 65.19.58.0 0.0.0.255 
+DENY 104.116.243.0 0.0.0.255 
+Permit Any
+
+Int Gi 1
+	ip access-group NOGAMBLING in
+	end
+	
+BALIK GAMBLING
+
+Int Gi 1
+	no ip access-group NOGAMBLING in
+	end
+	
+Ex. 4 Your young brother/sister -> Bagsak!
+kaka-torrent:
+BLOCK
+www.thepiratebay.org
+www.yts.mx
+www.torrentfreak.com
+
+conf t
+NO ip access-list standard NOTORRENT
+ip access-list standard NOTORRENT
+DENY 162.159.136.0 0.0.0.255  
+DENY 104.31.16.0 0.0.0.255  
+DENY 172.67.73.0 0.0.0.255 
+
+Permit Any
+
+Int Gi 1
+	ip access-group NOTORRENT in
+	end
+	
+
+Layer 4 FIREWALL
+ 3 Types of Security
+ 
+ 1. Praning (kahit ping ayaw) (STI)
+ 2. Sakto (FBI)
+ 3. bobo (CCP)
+ 
+NSE (network security expert)
+CISCO Application server
+is router is also a server - YES . if you put a module 
+
+Firewall Creation
+
+Firewall Profile No.1: use ExtendedACL vs NamedExtendedACL:
+ex.1: you are the admin for POGO sites:
+www.web310.com open only http, https, ping
+www.web311.com open only dns, https, ssh		==> 6 lines:
+	GOLDEN FIREWALL FORMULA: paloalto, fortinet, cisco, checkpoint.
+	
+	protocol			hacker 		victim 			port
+tcp, udp, icmp, ip		Any			web310/11		80, 443, 53, 22
+
+conf t
+service timestamps log datetime
+service timestamps debug datetime
+logging trap 5
+no ip access-list Extended FWP1
+ip access-list Extended FWP1
+	permit tcp any host www.web310.com eq 80 log !http
+	permit tcp any host www.web310.com eq 443 log !https
+	permit icmp any host www.web310.com log
+	permit tcp any host www.web311.com eq 53 log !dns
+	permit tcp any host www.web311.com eq 443 log !https
+	permit tcp any host www.web311.com eq 22 log !ssh
+Int Gi 3
+	ip access-group FWP1 in 
+	
+REMOVE FIREWALL
+Int Gi 3
+	NO ip access-group FWP1 in 
+
+!SPLUNK - SIEM  Security Information & Event Management (Sumbungan ng Bayan)
+ano ang gagawin para magsumbong si Cisco sa SIEM - insert -> log
+
+pag 9 ang dulo ng port, malas
+
+TAKAS: Ctrl Shift 6 bitaw X then disco 1
+
+
+ex.2: you are the admin for POGO sites:
+www.web310.com open only ssh,dns,http
+www.web311.com open telnet, ssh, https, ping/icmp => 7 lines
+	GOLDEN FIREWALL FORMULA: paloalto, fortinet, cisco, checkpoint.
+	
+	protocol			hacker 		victim 			port
+	
+conf t
+no ip access-list Extended FWP2
+ip access-list Extended FWP2
+	permit tcp any host www.web310.com eq 22 log
+	permit tcp any host www.web310.com eq 53 log 
+	permit tcp any host www.web310.com eq 80 log
+	permit tcp any host www.web311.com eq 23 log 
+	permit tcp any host www.web311.com eq 22 log 
+	permit tcp any host www.web311.com eq 443 log 
+	permit icmp any host www.web311.com log
+Int Gi 3
+	ip access-group FWP2 in 
+
+ex.3: you are the admin for PRANING POGO sites:
+www.web310.com open only 443
+www.web311.com open only ping
+
+conf t
+no ip access-list Extended PRANING3
+ip access-list Extended PRANING3
+	permit tcp any host www.web310.com eq 443 log
+	permit icmp any host www.web311.com log
+Int Gi 3
+	ip access-group PRANING3 in 
+
+
+ex.4: you are the admin for SUPERPRANING4 POGO sites:
+www.web310.com open only ping, dns
+www.web311.com open only ping ssh = 4 lines
+
+conf t
+no ip access-list Extended SUPERPRANING4
+ip access-list Extended SUPERPRANING4
+	permit icmp any host www.web310.com log
+	permit tcp any host www.web310.com eq 53 log
+	permit icmp any host www.web311.com log
+	permit tcp any host www.web311.com eq 22 log
+Int Gi 3
+	ip access-group SUPERPRANING4 in 
+	
+remove SUPERPRANING4
+Int Gi 3
+	no ip access-group SUPERPRANING4 in 	
+	
+	
+Blue Team / Firewall Configurations
+All these firewall config will prepare you for SOC
+anong ginagawa ng SOC = threat defense
+
+ang ginagawa ng umbrella, binablock niya ang sites na makaka harm automatically
+- pag under ka ng cisco umbrella, protected ka
+
+Ano mga kailangan lumabas sa resume
+Zone Based Firewall (Fortinet Cisco Paloalto)
+instruction prevention/URL Filtering
+DNS Umbrella
+
+NAT ang nagbibigay ng Internet sa building
+
+Building Management System (automated ng dashboard, every floor, every room, elevator) - LINUX
+
+Linux Commands
+
+network address translation: NAT GIVE internet to entire companies or buildings.
+
+linBld2:
+sudo su
+ifconfig eth0 192.168.102.100 netmask 255.255.255.0 up
+route add default gw 192.168.102.11
+ping 192.168.102.11
+
+linBld3:
+sudo su
+ifconfig eth0 192.168.103.100 netmask 255.255.255.0 up
+route add default gw 192.168.103.11
+ping 192.168.103.11
+
+
+config t
+int gi 1
+ip nat OUTSIDE
+int gi 2
+ip nat INSIDE
+int gi 3
+ip nat INSIDE
+no access-list 9
+access-list 9 permit 192.168.102.0 0.0.0.255
+access-list 9 permit 192.168.103.0 0.0.0.255
+ip nat inside source list 9 interface Gi 1 overload
+ip nat inside source static 192.168.102.100 208.8.8.69
+ip nat inside source static 192.168.103.100 208.8.8.88
+end
+
+VMWare
+
+VMNET 2 and VMNET3 gagawin sa bahay
+
+
+iox - enabling extended features (python and linux)
+
+
+Postman SOftware
+JSON/REST API
+
