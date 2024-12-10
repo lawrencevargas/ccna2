@@ -1,0 +1,87 @@
+ACCESS CONTROL LIST 
+remove crypto map
+
+bigay internet
+config t
+IP ROUTE 0.0.0.0  0.0.0.0 208.8.8.2
+ip name-server 8.8.8.8 1.1.1.1
+ip domain-lookup
+
+TASK 1.1  REDO THE ACTIVITY OR MAKE YOUR OWN ACL OF BLOCKING THE PING OF THE WEBSITES
+BLOCK 
+
+ping cnn.com
+ping abcnews.go.com
+ping abcnews.go.com 2
+ping msnbc.com
+ping msnbc.com 2
+ping msnbc.com 3
+ping foxnews.com
+ping foxnews.com 2
+
+conf t
+NO ip access-list standard NONEWS
+ip access-list standard NONEWS
+DENY 151.101.0.0 0.0.255.255  
+DENY 216.137.0.0 0.0.255.255  
+DENY 34.110.0.0 0.0.255.255  
+DENY 184.50.0.0 0.0.255.255
+DENY 23.210.0.0 0.0.255.255
+DENY 23.35.0.0 0.0.255.255  
+DENY 23.36.0.0 0.0.255.255  
+DENY 151.101.0.0 0.0.255.255  
+Permit Any
+
+Int Gi 1
+	ip access-group NONEWS in
+	end
+	
+BALIK NEWS
+
+Int Gi 1
+	no ip access-group NONEWS in
+	end
+	
+TASK 1.2 BLOCK SPECIFIC PORTS OF THE OTHER ROUTERS
+
+conf t
+no ip access-list Extended FWPolicy1
+ip access-list Extended FWPolicy1
+	permit tcp any host 192.168.102.12 eq 23 log
+	permit icmp any host 192.168.102.12 log
+	
+Int Gi 2
+	ip access-group FWPolicy1 in 
+	
+	
+TASK 2
+Network Address Translation
+-create a NAT setup, your choice which Router to Apply.
+
+linBld2:
+sudo su
+ifconfig eth0 192.168.102.100 netmask 255.255.255.0 up
+route add default gw 192.168.102.12
+ping 192.168.102.12
+
+linBld3:
+sudo su
+ifconfig eth0 192.168.103.100 netmask 255.255.255.0 up
+route add default gw 192.168.103.12
+ping 192.168.103.12
+
+@R2 Router
+config t
+int gi 1
+ip nat OUTSIDE
+int gi 2
+ip nat INSIDE
+int gi 3
+ip nat INSIDE
+no access-list 9
+access-list 9 permit 192.168.102.0 0.0.0.255
+access-list 9 permit 192.168.103.0 0.0.0.255
+ip nat inside source list 9 interface Gi 1 overload
+ip nat inside source static 192.168.102.100 208.8.8.69
+ip nat inside source static 192.168.103.100 208.8.8.88
+end
