@@ -227,8 +227,9 @@ sh spanning-tree vlan 1
 TASK3: EXPENSIVE SWITCH/MANAGEABLE SWITCH:\ = 20k
 1. mac address learning": sh mac address-table
 2  mac address filtering
-3  mac address forwaring
-4  Php: loop avoidance
+3  mac address forwarding, Switch FullDuplex = 2x speed = 1g --> 2gig
+			   wifi7 = 46gbps vs switch: 10gbs, switch wins! Wired = FULL DUPLEX; Wireless = Half Duplex
+4  Php: loop avoidance (CISCO tech) si cisco lang meron nun
 5. $$: Vlan Feature $$ = 60k up
 
 COREbaba12#sh mac address-table
@@ -299,6 +300,9 @@ TASK9: SPANNING-TREE PROTOCOL: 802.1D: protect switches Slowly.
 blk-lis-lrn-fwd = 30 seconds.
 wireshark = bridge priority is 32768 = very Hackable!
 " bobo/inutil ang Network Engineer nyo sa company!"
+if 24576 = highly qualified, magaling, malupet
+if 28672 = bangag on duty ; mag run ng wireshark check root identifier
+if 0 = CCIE/Risk Taker
 Protect the Most Important SWitch in your 
 Office: RootBridge = TAAS, 2ndRootBridge = BABA:
 TAAS:/d1       32786 --> 24576
@@ -358,17 +362,17 @@ end
 #sh int status err-disabled 
 TAAS: bounce/UP/down, bring BACK TO LIFE.
 config t
-int fa 0/1
+int fa 0/3
  shut
  no shut
-int fa 0/3
+int fa 0/7
  shut
  no shut
 end
 
 TASK11: Multiple instance STP: 802.1s
 Make FORCEs all CPU/Instances work to protect VLANs, cpu0 = is working 
-step1: sync all Vlans with VTP:vlanTrunkingProtocol:
+step1: sync all Vlans with VTP:vlanTrunkingProtocol: - nag-ssynchronized
 TAAS/BABA: d1/d2:
 config t
 vtp domain ccna
