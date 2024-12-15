@@ -1,0 +1,355 @@
+DAY 5 
+
+blaciste@pcso.gov.ph
+
+realme
+xiaomi
+apple
+
+IPV6 routing
+Hexadecimal
+can be dropped sa harap
+sa likod bawal
+double colon happens once
+
+::1 new loopback from 127.0.0.1
+
+IPv6 Adoption - Dec. 4, 2024 (DOST)
+
+IPv4 address exhaustion
+
+ipV6 
+unli address
+deda:faaf:deaf:aded::eeea
+
+ex.1 : accenture is using network acad:acad:dace:dace::/64., subnet to 50 offices
+
+RIVAN: CAIdali
+Convert:  50 offices is 6bits
+Addto/: /64 + /6 = /70
+iGetMoPattern: 
+			8  4  2   1    8  4  2   1     8  4  2   1    8  4  2   1 
+1st		    0  0  0   0    0  0  
+acad:acad:dace:dace:0000::/70
+2nd         0  0  0   0    0  1
+acad:acad:dace:dace:0400::/70
+3rd         0  0  0   0    1  0
+acad:acad:dace:dace:0800::/70
+4th         0  0  0   0    1  1
+acad:acad:dace:dace:0c00::/70
+5th         0  0  0   1    0  0
+acad:acad:dace:dace:1000::/70
+6th
+
+ex.2 : SYKES.COM is using network acad:acad:dace:dace::/64., subnet to 350 offices. Rivan: CAIdali
+Convert: 350 offices is 9bits
+Addto/: /64+/9 = /73
+iGetPattern: 
+			8  4  2   1    8  4  2   1     8  4  2   1    8  4  2   1 
+1st 		0  0  0   0    0  0  0   0     0 :0000:
+2nd 		0  0  0   0    0  0  0   0     1 :0080:
+3rd 		0  0  0   0    0  0  0   1     0 :0100:
+			0  0  0   0    0  0  0   1     1 :0180:
+			0  0  0   0    0  0  1   0     0 :0200:
+			0  0  0   0    0  0  1   0     1 :0280:
+			
+ex.3 : SYKES.COM is using network acad:acad:dace:dace::/64., subnet to 1500 offices. Rivan: CAIdali
+Convert: 1500 offices is 11
+Addto/: /64+/11 = /75
+iGetPattern: 
+			8i  4i  2i   1i    8i  4i  2i   1i     8i  4i  2i   1i    8i  4i  2i   1i 
+1st 		0  	0  	0    0     0   0   0    0      0   0   0   :0000:
+			0   0   0    0     0   0   0    0      0   0   1   :0020:
+			0   0   0    0     0   0   0    0      0   1   0   :0040:
+			0   0   0    0     0   0   0    0      0   1   1   :0060:
+			0   0   0    0     0   0   0    0      1   0   0   :0080:
+			0   0   0    0     0   0   0    0      1   0   1   :00a0:
+			0   0   0    0     0   0   0    0      1   1   0   :00c0:
+			0   0   0    0     0   0   0    0      1   1   1   :00e0:
+			0   0   0    0     0   0   0    1      0   0   0   :0100:
+			
+
+ex.4 : telus.COM is using network acad:acad:dace:dace::/64., subnet to 210 offices. Rivan: CAIdali
+Convert: 210 offices is 8bits
+Addto/: /64+/8 = /72
+iGetPattern: 
+			8i  4i  2i   1i    8i  4i  2i   1i     8i  4i  2i   1i    8i  4i  2i   1i 
+1st 		0  	0  	0    0     0   0   0    0   :0000:
+			0  	0  	0    0     0   0   0    1	:0100:
+			0  	0  	0    0     0   0   1    0	:0200:
+			0  	0  	0    0     0   0   1    1	:0300:
+			0  	0  	0    0     0   1   0    0	:0400:
+			0  	0  	0    0     0   1   0    1	:0500:
+			0  	0  	0    0     0   1   1    0	:0600:
+			0  	0  	0    0     0   1   1    1	:0700:
+			0  	0  	0    0     1   0   0    0	:0800:
+			
+How to configure this hands-on:
+@EDGE
+conf t
+ipv6 unicast-routing
+int loopback0
+	ipv6 add acad:acad:dace:dace:0000::AAAA/72
+int loopback1
+	ipv6 add acad:acad:dace:dace:0100::AAAA/72
+int loopback2
+	ipv6 add acad:acad:dace:dace:0200::AAAA/72
+int loopback3
+	ipv6 add acad:acad:dace:dace:0300::AAAA/72
+int loopback4
+	ipv6 add acad:acad:dace:dace:0400::AAAA/72
+int loopback5
+	ipv6 add acad:acad:dace:dace:0500::AAAA/72
+END
+
+sh ipv6 int br
+
+
+
+
+ex.5 : vxi.COM is using network baba:bebe:baba:bebe::/64, subnet to 6 offices. Rivan: CAIdali
+Convert: 6 offices is 3 bits
+Addto/: /64+/3 = /67
+iGetPattern: 
+			8i  4i  2i   1i    8i  4i  2i   1i     8i  4i  2i   1i    8i  4i  2i   1i 
+1st 		0  	0  	0   :0000:
+			0  	0  	1   :2000:
+			0  	1  	0   :4000:
+			0  	1  	1   :6000:
+			1  	0  	0   :8000:
+6th			1  	0  	1   :a000:
+
+@EDGE
+conf t
+ipv6 unicast-routing
+int loopback0
+	ipv6 add baba:bebe:baba:bebe:0000::AAAA/67
+int loopback1
+	ipv6 add baba:bebe:baba:bebe:2000::AAAA/67
+int loopback2
+	ipv6 add baba:bebe:baba:bebe:4000::AAAA/67
+int loopback3
+	ipv6 add baba:bebe:baba:bebe:6000::AAAA/67
+int loopback4
+	ipv6 add baba:bebe:baba:bebe:8000::AAAA/67
+int loopback5
+	ipv6 add baba:bebe:baba:bebe:a000::AAAA/67
+END
+sh ipv6 int br
+Isang Laboratory sa exam nyo!!!!
+
+
+SWITCHING TIME 11:00AM
+
+
+
+MSP - Managed Service Provider (uso ngayon)
+Facebook FBOSS Switch
+
+Wired = FULL DUPLEX
+Wireless = Half Duplex
+STP = CISCO (wireshark)
+
+
+ex.5 : ciscoacad.COM is using network aaaa:bbbb:cccc::/32, subnet to 100 offices. Rivan: CAIdali
+Convert: 100 offices is 7 bits
+aDD1 /32+ /7 = /39
+iGetPattern: 
+			8i  4i  2i   1i    8i  4i  2i   1i     8i  4i  2i   1i    8i  4i  2i   1i 
+1st 		0  	0  	0    0     0   0   0 :0000:
+			0  	0  	0    0     0   1   0 :0200:
+			0  	0  	0    0     1   0   0 :0400:
+			0  	0  	0    0     1   1   0 :0600:
+			0  	0  	0    1     0   0   0 :1000:
+			0  	0  	0    1     0   1   0 :1400:
+			0  	0  	0    1     1   0   0 :1800:
+
+conf t -NOT FIXED
+ipv6 unicast-routing
+int loopback0
+	ipv6 add aaaa:bbbb:cccc:0000::AAAA/39
+int loopback1
+	ipv6 add aaaa:bbbb:cccc:0400::AAAA/39
+int loopback2
+	ipv6 add aaaa:bbbb:cccc:0800::AAAA/39
+int loopback3
+	ipv6 add aaaa:bbbb:cccc:0b00::AAAA/39
+int loopback4
+	ipv6 add aaaa:bbbb:cccc:1000::AAAA/39
+int loopback5
+	ipv6 add aaaa:bbbb:cccc:1400::AAAA/39
+END
+sh ipv6 int br
+
+
+config t
+Int Range fa0/10-12
+ shutdown
+ switchport trunk Encap Dot1Q !STeD
+ switchport mode trunk !SMT
+ switchport trunk allowed vlan 1-100 !STAV
+ no shut
+ do sh int trunk !SIT
+ 
+ 
+32K = Default/Not protected = root identifoer
+1. BOBO / Tanga
+2. High Qualified/Talentent
+3. Bangag/High
+
+
+sh mac address-table
+
+802.1q 
+Trunking Protocol
+
+802.1x (Port Security)
+Implement security via layer 2
+@CoreTaas
+conf t
+int f0/2
+	switchport mode access
+	switchport port-security mac-address sticky
+	switchport port-security maximum 1
+	switchport port-security violation shutdown
+	end
+sh port-security address	
+sh int status err-disable
+
+
+conf t
+int range f0/6,f0/8
+shut
+no shut
+end
+
+802.1s (Multi-instance Spanning-Tree) aka Superman
+@CORE TAAS
+conf t
+vlan 11-19
+exit
+vlan 21-29
+exit
+vlan 31-39
+exit
+do sh vlan br
+
+
+@TAAS/BABA (PRIORITY insances)
+
+conf t
+spanning-tree mode mst
+spanning-tree mst configuration
+name supermanstp
+revision 1
+	Instance 1 vlan 11-19
+	Instance 2 vlan 21-29
+	Instance 3 vlan 31-39
+
+do sh spanning-tree  mst configuration
+
+@Taas make taas rootbridge again:
+conf t
+spanning-tree mst 0 root primary
+spanning-tree mst 1 root primary
+spanning-tree mst 2 root secondary
+spanning-tree mst 3 root secondary
+
+@baba
+conf t
+spanning-tree mst 0 root secondary
+spanning-tree mst 1 root secondary
+spanning-tree mst 2 root primary
+spanning-tree mst 3 root primary
+
+Etherchannel (requires defined trunking ports)
+!BOTH SWITCHES
+conf t
+	default interface range fa0/1-12
+	int range fa0/10-12
+	switchport trunk encapsulation dot1q
+	switchport mode trunk
+	end
+sh int trunk
+
+Etherchannel RST Hayup
+
+@D1/A1
+config t
+Int Range e0/1-2
+ channel-group 1 mode active
+ channel-protocol Lacp
+ do sh etherchannel summary
+ do sh int po1 | inc BW
+ 
+!2nd ETHERCHANNEL
+@D1 
+config t
+Int Range e0/0, e0/3
+ channel-group 2 mode active
+ channel-protocol Lacp
+ do sh etherchannel summary
+ do sh int po2 | inc BW
+ 
+@A2
+config t
+Int Range e0/1, e0/2
+ channel-group 2 mode active
+ channel-protocol Lacp
+ do sh etherchannel summary
+ do sh int po2 | inc BW
+ 
+ 
+!3rd Etherchannel : sh cdp nei
+
+@D1/D2
+config t
+Int Range e1/2-3
+ channel-group 3 mode active
+ channel-protocol Lacp
+ do sh etherchannel summary
+ do sh int po3 | inc BW
+
+
+!4th Etherchannel
+@D2
+config t
+Int Range e0/1-2
+ channel-group 1 mode active
+ channel-protocol Lacp
+ do sh etherchannel summary
+ do sh int po1 | inc BW
+
+
+@A1
+config t
+Int Range e1/0, e0/3
+ channel-group 1 mode active
+ channel-protocol Lacp
+ do sh etherchannel summary
+ do sh int po1 | inc BW
+ 
+ 
+!5th Etherchannel
+@D2/A2
+config t
+Int Range e0/0, e0/3
+ channel-group 2 mode active
+ channel-protocol Lacp
+ do sh etherchannel summary
+ do sh int po2 | inc BW
+
+
+Final Topic: Redundancy 
+HSRP: hot standby routing protocol
+VRRP: virtual router redundancy protocol: any brand
+
+@TAAS/PLDTinternet:
+config t
+hostname PLDTITO
+Track 1 Int gi 0/1 line-protocol !track the link (monitor the line)
+Int vlan 1
+standby 1 ip 10.21.1.6 !default gateway
+standby 1 preempt
+standby 1 Priority 150
+standby 1 Track 1 decrement 60 !pag naputol ang pldt, difference ng 150-60
