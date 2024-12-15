@@ -487,12 +487,12 @@ Companies: 2 or 3 telcos:
 @TAAS/PLDTinternet:
 config t
 hostname PLDTITO
-Track 1 Int gi 0/1 line-protocol
+Track 1 Int gi 0/1 line-protocol 
 Int vlan 1
-standby 1 ip 10.__.1.6
+standby 1 ip 10.21.1.6 
 standby 1 preempt
 standby 1 Priority 150
-standby 1 Track 1 decrement 60
+standby 1 Track 1 decrement 60 
 
 @D1 para realworld:
 config t
@@ -507,7 +507,7 @@ COREBABA/GLOBE:
 config t
 hostname GLOBEITO
 Int vlan 1
-standby 1 ip 10.__.1.6
+standby 1 ip 10.21.1.6
 standby 1 preempt
 standby 1 Priority 100
 
